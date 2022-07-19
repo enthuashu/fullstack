@@ -1,0 +1,38 @@
+To create server first we need to have server creater which is called "Express"
+Express.js provides an easy way to create web server
+To install express server we need to right this command on terminal =>
+npm install express
+
+
+when you install any package from npm than a folder (node modules) is created which contains all the functionality and codes of the downloaded package
+Package.json tells a summary about our project
+In package.json, dependecies maintains a record of all the npm packages installed
+
+node modules => contains all the codes of downloaded packages
+package.json => contains information of the project and dependcies which maintains names of downloaded packages from npm
+packagelock.json=> contains additional information about the downloaded packages
+
+We never use/edit these files, these are just additional files which give information
+
+To create server 
+step 0=> install express from npm (npm install express) done
+step 1=> import express done
+step 2=> app = express() done
+step 3=> creating server  app.listen(port,call backfunction)
+step 4=> writing codes for every frontend requests which are called API (Application Program Interface)
+
+// Port tells about the address of our server
+// localhost is used when we do coding in our local computer
+//e.g localhost:8000
+
+
+// callback function is called when its previous program is completed
+
+
+Postman
+
+whenever we create a full stack project we first create its backend
+we write codes for every kind of requests which will come from frontend in future
+Till that time, when we don't have frontend, we need some tool which works as a virtual frontend
+for making requests to backend
+so basically postman is used to make requests to backend until frontend is developed
