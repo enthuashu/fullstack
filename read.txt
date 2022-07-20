@@ -15,6 +15,7 @@ packagelock.json=> contains additional information about the downloaded packages
 We never use/edit these files, these are just additional files which give information
 
 To create server 
+npm init
 step 0=> install express from npm (npm install express) done
 step 1=> import express done
 step 2=> app = express() done
@@ -36,3 +37,24 @@ we write codes for every kind of requests which will come from frontend in futur
 Till that time, when we don't have frontend, we need some tool which works as a virtual frontend
 for making requests to backend
 so basically postman is used to make requests to backend until frontend is developed
+
+
+// status codes are 3 digit codes sent from backend to frontend which tells about the status of the response
+// e.g. 200 for successful response
+//      201 when data is created at database
+//      400 bad requests
+//      401 unauthorized
+//      404 not found
+
+
+// routing is a process of selecting a path 
+// routing happens both at frontend and backend
+// 1. routing at frontend describes which page to show at which route  (found in urls of browser)
+// 2. routing at backend describes which data to sent at which route (api) (found in network tab)
+
+
+e.g. suppose we need profile information of 1000 users one by one,so we cannot define 1000 apis for every users
+we define one api (which works as a function) and this api accepts params which tells about user data requested
+
+
+Both are closely related but they are not the same at all, params are parameters set for the route, query are values resembling variable assignment that provide extra information on what is being required for the route and it will always start with a ? on the URL
