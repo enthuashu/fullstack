@@ -1,6 +1,21 @@
 const express = require("express");
 const app = express();
 
+// We need to tell our server that we will receive data in form of json from frontend by writing this code
+app.use(express.json());
+
+// when we send data from frontend to backend in the form of payload
+app.post("/signup", (req, res) => {
+  try {
+    // here we receive data from frontend
+    // we get payload data of frontend from "req.body"
+    console.log(req.body);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
+});
+
 // writing first request for frontend // writing first API // writing an api
 // api.get(route,callback)
 app.get("/feed", (req, res) => {
@@ -58,8 +73,17 @@ app.get("/filters", (req, res) => {
   }
 });
 
+app.post("/contactus", (req, res) => {
+  try {
+    console.log(req.body);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
+});
+
 // writing atleast 5 requests and send their postman responses and code ss
 
-//code for creating server
+//code for creating servemcr39
 let port = 5000;
 app.listen(port, () => console.log(`Server is running at ${port}`));

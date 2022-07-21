@@ -58,3 +58,55 @@ we define one api (which works as a function) and this api accepts params which 
 
 
 Both are closely related but they are not the same at all, params are parameters set for the route, query are values resembling variable assignment that provide extra information on what is being required for the route and it will always start with a ? on the URL
+
+
+
+There might be situations where we need to have different apis for different users.But writing different apis for different users is very naive.
+So we try to do this work by writing just one api.
+
+There are two ways to do so..
+
+
+1. Using Params
+We just need to define a variable using semicolon : while writing api 
+and when we call that api that user data is copied in the variable and api do the working
+
+/Api declaration
+app.get("/data/:name")  : colon is used
+/Api calling
+localhost:8000/data/ashu
+localhost:8000/data/satyam
+getting value = req.params.name
+
+
+
+
+
+
+
+2. Using Queries
+
+/Api declaration
+app.get("/data")  no additional declaration
+/Api calling
+localhost:8000/data?name=Ashu
+localhost:8000/data?name=Satyam
+getting value = req.query.name
+
+
+
+
+
+GET method is used when we send data from backend to frontend
+e.g. All the messages data, all the posts data etc
+
+POST method is used when we send data from frontend to backend
+Data is sent from frontend to backend the form of json called payload
+
+
+Sending Data from Frontend/Postman to backend
+Cick on three dots and select Add request
+Change request type to POST
+Click on Body
+Click on raw
+Select JSON from right
