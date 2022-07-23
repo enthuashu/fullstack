@@ -110,3 +110,40 @@ Change request type to POST
 Click on Body
 Click on raw
 Select JSON from right
+
+
+
+// database
+Database is responsible for storing data nothing else
+Whenever we get request from frontend for any type of data. We ask from database to give data and then server response that data
+Also Frontend asks to save some data in database, then database stores data
+
+// Necessary Conditions (Local)
+1. Availability of Database (MongoDB) install mongodb server from official site
+2. Connection of Database and Server
+3. Database is always connected before server initialization
+4. To connect database with server we need a connector/package from npm. 
+  That Package is called mongoose
+
+
+  // We have a standard way of maintaning code structure of a project in which we follow certain guidelines
+ 1. We keep all the connections in separate folder e.g. db connection, aws connection, redis connection
+ 2.
+
+
+
+We use database basically for 4 operations
+
+CRUD Operation 
+  
+1. Creating Document => This creates new entry in database
+2. Reading Document  => This used to get Documents from db
+3. Updating Document  => This used to update existing Documents
+4. Deleting Document  => This used to delete Document/Documents
+
+
+// MongoDB database is further divided into various sub collections which are responsible for storing particular set of data
+e.g. Collection of users, collections of posts, collections of messages, collections of followers etc
+
+Now Every collection has its BLUEPRINT, called Model
+This BLUEPRINT tells about the fields and type of fields we will store in this collection
