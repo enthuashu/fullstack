@@ -13,16 +13,14 @@ app.use(express.json());
 // We create new entry in database by data send from frontend or postman so POST method is used
 app.post("/signup", async (req, res) => {
   try {
-    const comingData = req.body;
-    // code for creating new data
-    const newUser = new USER_MODEL({
-      name: comingData.username,
-      age: comingData.userage,
-      email: comingData.useremail,
-      password: comingData.userpass,
-      dob: comingData.userdob,
+    const newEntry = new USER_MODEL({
+      name: req.body.name,
+      age: req.body.age,
+      dob: req.body.dob,
+      email: req.body.email,
+      password: req.body.password,
     });
-    await newUser.save();
+    await newEntry.save();
     res.json({ success: true, message: "New data created" });
   } catch (error) {
     console.log(error);
