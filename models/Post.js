@@ -1,12 +1,31 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-  dob: String,
-  email: String,
-  password: String,
-});
+const postschema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    comments: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
-const createdModal = mongoose.model("post", userSchema);
-module.exports = createdModal;
+const postmodel = mongoose.model("post", postschema);
+module.exports = postmodel;

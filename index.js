@@ -3,6 +3,7 @@ const databaseconnection = require("./connectors/dbconnection");
 const app = express();
 //When you want to import any file from your root folder you put "./" and if you want to import something outside of root folder you put "../"
 const USER_MODEL = require("./models/User");
+const POST_MODEL = require("./models/Post");
 const bcrypt = require("bcryptjs");
 
 // We need to tell our server that we will receive data in form of json from frontend by writing this code
@@ -55,6 +56,63 @@ app.post("/signup", async (req, res) => {
     });
     await newEntry.save();
     res.json({ success: true, message: "New data created" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// new post api
+app.post("/newpost", async (req, res) => {
+  try {
+    const { title, description, image, likes, comments } = req.body;
+    const newEntry = new POST_MODEL({
+      title,
+      description,
+      image,
+    });
+    await newEntry.save();
+    res.json({ success: true, message: "New data created" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// gettings users data
+app.get("/allusers", async (req, res) => {
+  try {
+    console.log("Fetching users from database...");
+    const data = await USER_MODEL.find();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// gettings post data in sorted order / latest
+app.get("/sortedpost", async (req, res) => {
+  try {
+    console.log("Fetching posts from database...");
+    // sorting is used to arrange data in any order as requested
+    // -1 is used for descending and 1 is used for ascending (used for getting latest data)
+    const data = await POST_MODEL.find().sort({ createdAt: -1 });
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// gettings post data according to condition
+app.get("/sortedpost", async (req, res) => {
+  try {
+    console.log("Fetching posts from database...");
+    // sorting is used to arrange data in any order as requested
+    // -1 is used for descending and 1 is used for ascending (used for getting latest data)
+    const data = await POST_MODEL.find().sort({ createdAt: -1 });
+    res.json({ success: true, data });
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, error: error.message });

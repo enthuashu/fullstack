@@ -136,11 +136,16 @@ We use database basically for 4 operations
 
 CRUD Operation 
   
-1. Creating Document => This creates new entry in database
-2. Reading Document  => This used to get Documents from db
-3. Updating Document  => This used to update existing Documents
-4. Deleting Document  => This used to delete Document/Documents
+1. Creating Document  (POST) => This creates new entry in database in a collection ☑️☑️
+2. Reading Document  (GET) => This used to get Documents from db
+3. Updating Document  (PUT/PATCH)  => This used to update existing Documents
+4. Deleting Document (DELETE)  => This used to delete Document/Documents
 
+GET,POST,PUT/PATCH,DELETE are called HTTP methods which differentiates work between apis
+GET is used to get data from database to frontend
+POST is used to send data from frontend to backend then database
+PUT/PATCH is used to update data in db
+DELETE is used to DELETE data
 
 // MongoDB database is further divided into various sub collections which are responsible for storing particular set of data
 e.g. Collection of users, collections of posts, collections of messages, collections of followers etc
