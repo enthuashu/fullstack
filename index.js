@@ -65,11 +65,12 @@ app.post("/signup", async (req, res) => {
 // new post api
 app.post("/newpost", async (req, res) => {
   try {
-    const { title, description, image, likes, comments } = req.body;
+    const { title, description, image, likes, comments, type } = req.body;
     const newEntry = new POST_MODEL({
       title,
       description,
       image,
+      type,
     });
     await newEntry.save();
     res.json({ success: true, message: "New data created" });
@@ -105,13 +106,34 @@ app.get("/sortedpost", async (req, res) => {
   }
 });
 
+// await POST_MODEL.find() => this returns all documents
+// but if we want filtered document then => await POST_MODEL.find({filter condition})
 // gettings post data according to condition
-app.get("/sortedpost", async (req, res) => {
+app.get("/filter", async (req, res) => {
   try {
-    console.log("Fetching posts from database...");
-    // sorting is used to arrange data in any order as requested
-    // -1 is used for descending and 1 is used for ascending (used for getting latest data)
-    const data = await POST_MODEL.find().sort({ createdAt: -1 });
+    console.log("Fetching filtered posts from database...");
+    // When we request data from database according to a particular condition, we use filtering before sending data
+    const data = await POST_MODEL.find({ type: "articles" });
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// If we want only specific fields from our database, instead of all the fields. E.g. We want only post tiltle, and description, not likes and comments
+// In this case , we use projection
+//await POST_MODEL.find({filter-condition},{projection})
+// Inside model.find(), first bracket describes filtering, while second bracket describes projection
+// 1 is used for presence, 0 is used for absence
+app.get("/projection", async (req, res) => {
+  try {
+    console.log("Fetching filtered posts from database...");
+    // When we request data from database according to a particular condition, we use filtering before sending data
+    const data = await POST_MODEL.find(
+      { type: "articles" },
+      { title: 1, description: 1, type: 1, _id: 0 }
+    );
     res.json({ success: true, data });
   } catch (error) {
     console.log(error);

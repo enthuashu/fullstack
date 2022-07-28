@@ -23,6 +23,9 @@ const postschema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    type: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

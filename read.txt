@@ -152,3 +152,10 @@ e.g. Collection of users, collections of posts, collections of messages, collect
 
 Now Every collection has its BLUEPRINT, called Model
 This BLUEPRINT tells about the fields and type of fields we will store in this collection
+
+
+
+Like we write APIS for our own database. And if we expose this API for public uses, then this is called Public API or Third API key.
+Like if we want to know Weather information about a particular city, we will request a third party API.
+Similarly if we want OTP service, we will request third party API.
+e,g. Jokes API, Weather API, timezone API, Google transplate api
