@@ -138,7 +138,7 @@ CRUD Operation
   
 1. Creating Document  (POST) => This creates new entry in database in a collection ☑️☑️
 2. Reading Document  (GET) => This used to get Documents from db
-3. Updating Document  (PUT/PATCH)  => This used to update existing Documents
+3. Updating Document  (PUT)  => This used to update existing Documents
 4. Deleting Document (DELETE)  => This used to delete Document/Documents
 
 GET,POST,PUT/PATCH,DELETE are called HTTP methods which differentiates work between apis
@@ -159,3 +159,16 @@ Like we write APIS for our own database. And if we expose this API for public us
 Like if we want to know Weather information about a particular city, we will request a third party API.
 Similarly if we want OTP service, we will request third party API.
 e,g. Jokes API, Weather API, timezone API, Google transplate api
+
+
+There are many ways to send data from frontend to backend as per our Availability.
+
+1. Using Params => localhost:3000/filter/:email                               req.params.email
+
+
+2. Using Queries => localhost:3000/filter?email="ashutosh"                    req.query.email
+
+
+3. Using Body => localhost:3000/filter  (inside raw and json we send)         req.body.name
+
+body is used for sending large data ... rest two are small

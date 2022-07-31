@@ -109,11 +109,11 @@ app.get("/sortedpost", async (req, res) => {
 // await POST_MODEL.find() => this returns all documents
 // but if we want filtered document then => await POST_MODEL.find({filter condition})
 // gettings post data according to condition
-app.get("/filter", async (req, res) => {
+app.get("/filter/:type", async (req, res) => {
   try {
     console.log("Fetching filtered posts from database...");
     // When we request data from database according to a particular condition, we use filtering before sending data
-    const data = await POST_MODEL.find({ type: "articles" });
+    const data = await POST_MODEL.find({ type: req.params.type });
     res.json({ success: true, data });
   } catch (error) {
     console.log(error);
@@ -138,6 +138,52 @@ app.get("/projection", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// post.find() is used to fetch many documents
+//But sometimes we need to find only one document,e.g. Profile information of a user by username
+// for this findOne method is used
+
+// Find one document which matches useremail
+app.get("/userdata/:email", async (req, res) => {
+  try {
+    const data = await USER_MODEL.findOne(
+      { email: req.params.email }, //filter
+      { name: 1, age: 1, _id: 0, email: 1 } // projection
+    );
+    res.json({ success: true, data });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
+});
+
+// 3. Update document => used to update document in database
+// Mostly we update one document not more like 90-95%
+// FindOneAndUpdate is used=> First bracket contains filter,second contains value to be updated
+app.put("/changeemail", async (req, res) => {
+  try {
+    const updateddocument = await USER_MODEL.findOneAndUpdate(
+      { email: req.body.email }, // which document to update
+      { name: req.body.name } // updated value
+    );
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
+});
+
+//4. Deleting Document => used to delete document ...
+// We normally delete only one document
+// DELETE method is used
+app.delete("/deactivate/:email", async (req, res) => {
+  try {
+    const deleteddocument = await USER_MODEL.findOneAndDelete({
+      email: req.params.email, // which document to delete
+    });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400).json({ success: false });
   }
 });
 
