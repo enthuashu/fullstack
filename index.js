@@ -1,194 +1,67 @@
 const express = require("express");
-const databaseconnection = require("./connectors/dbconnection");
 const app = express();
-//When you want to import any file from your root folder you put "./" and if you want to import something outside of root folder you put "../"
-const USER_MODEL = require("./models/User");
-const POST_MODEL = require("./models/Post");
-const bcrypt = require("bcryptjs");
+const databaseconnection = require("./connectors/dbconnection");
+const CONTENT_MODEL = require("./models/Content");
 
-// We need to tell our server that we will receive data in form of json from frontend by writing this code
 app.use(express.json());
 
-// 1. Create Operation
-// request for saving/creating new entry in database
-// As we create new document, based on request and data coming from backend
-// We create new entry in database by data send from frontend or postman so POST method is used
-app.post("/shortcut", async (req, res) => {
+// content will come from frontend to backend so POST method is used
+app.post("/api/save", async (req, res) => {
   try {
-    // Shortcut => variables should be same at model and frontend
-    const { name, age, dob, email, password } = req.body;
-    // this mean
-    // name=req.body.name
-    // age=req.body.age,
-    // email=req.body.email   This is called Object destructuring
-    const newEntry = new USER_MODEL({
-      name, // this means name:name
-      age, // age:age
-      dob,
-      email,
-      password,
-    });
-
-    //If in any object, the key value pair is same, then we can write only one
-    await newEntry.save();
-    res.json({ success: true, message: "New data created" });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// There is no relation of encryption with model (we describe password as string)
-app.post("/signup", async (req, res) => {
-  try {
-    const { name, age, dob, email, password } = req.body;
-    // const newEntry = new USER_MODEL({ name:name, age:age, dob:dob, email:email, password:password }); is same as
-    // We encrypt data before saving
-
-    let encryptedpassword = await bcrypt.hash(password, 12); // code for encrypting
-
-    const newEntry = new USER_MODEL({
-      name,
-      age,
-      dob,
-      email,
-      password: encryptedpassword,
-    });
-    await newEntry.save();
-    res.json({ success: true, message: "New data created" });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// new post api
-app.post("/newpost", async (req, res) => {
-  try {
-    const { title, description, image, likes, comments, type } = req.body;
-    const newEntry = new POST_MODEL({
-      title,
+    const { category, headline, description, type } = req.body;
+    const newContent = new CONTENT_MODEL({
+      category,
+      headline,
       description,
-      image,
       type,
     });
-    await newEntry.save();
-    res.json({ success: true, message: "New data created" });
+    await newContent.save();
+    return res.json({ success: true });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ success: false, error: error.message });
+    return res.status(400).json({ success: false, error: error.message });
   }
 });
 
-// gettings users data
-app.get("/allusers", async (req, res) => {
+// getting all news
+app.get("/api/news", async (req, res) => {
   try {
-    console.log("Fetching users from database...");
-    const data = await USER_MODEL.find();
-    res.json({ success: true, data });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// gettings post data in sorted order / latest
-app.get("/sortedpost", async (req, res) => {
-  try {
-    console.log("Fetching posts from database...");
-    // sorting is used to arrange data in any order as requested
-    // -1 is used for descending and 1 is used for ascending (used for getting latest data)
-    const data = await POST_MODEL.find().sort({ createdAt: -1 });
-    res.json({ success: true, data });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// await POST_MODEL.find() => this returns all documents
-// but if we want filtered document then => await POST_MODEL.find({filter condition})
-// gettings post data according to condition
-app.get("/filter/:type", async (req, res) => {
-  try {
-    console.log("Fetching filtered posts from database...");
-    // When we request data from database according to a particular condition, we use filtering before sending data
-    const data = await POST_MODEL.find({ type: req.params.type });
-    res.json({ success: true, data });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// If we want only specific fields from our database, instead of all the fields. E.g. We want only post tiltle, and description, not likes and comments
-// In this case , we use projection
-//await POST_MODEL.find({filter-condition},{projection})
-// Inside model.find(), first bracket describes filtering, while second bracket describes projection
-// 1 is used for presence, 0 is used for absence
-app.get("/projection", async (req, res) => {
-  try {
-    console.log("Fetching filtered posts from database...");
-    // When we request data from database according to a particular condition, we use filtering before sending data
-    const data = await POST_MODEL.find(
-      { type: "articles" },
-      { title: 1, description: 1, type: 1, _id: 0 }
-    );
-    res.json({ success: true, data });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
-// post.find() is used to fetch many documents
-//But sometimes we need to find only one document,e.g. Profile information of a user by username
-// for this findOne method is used
-
-// Find one document which matches useremail
-app.get("/userdata/:email", async (req, res) => {
-  try {
-    const data = await USER_MODEL.findOne(
-      { email: req.params.email }, //filter
-      { name: 1, age: 1, _id: 0, email: 1 } // projection
-    );
-    res.json({ success: true, data });
-  } catch (error) {
-    res.status(400).json({ success: false });
-  }
-});
-
-// 3. Update document => used to update document in database
-// Mostly we update one document not more like 90-95%
-// FindOneAndUpdate is used=> First bracket contains filter,second contains value to be updated
-app.put("/changeemail", async (req, res) => {
-  try {
-    const updateddocument = await USER_MODEL.findOneAndUpdate(
-      { email: req.body.email }, // which document to update
-      { name: req.body.name } // updated value
-    );
-    res.json({ success: true });
-  } catch (error) {
-    res.status(400).json({ success: false });
-  }
-});
-
-//4. Deleting Document => used to delete document ...
-// We normally delete only one document
-// DELETE method is used
-app.delete("/deactivate/:email", async (req, res) => {
-  try {
-    const deleteddocument = await USER_MODEL.findOneAndDelete({
-      email: req.params.email, // which document to delete
+    const newsdata = await CONTENT_MODEL.find({ type: "news" }).sort({
+      _id: -1,
     });
-    res.json({ success: true });
+    return res.json({ data: newsdata, success: true });
   } catch (error) {
-    res.status(400).json({ success: false });
+    console.log(error);
+    return res.status(400).json({ success: false, error: error.message });
   }
 });
 
-// writing atleast 5 requests and send their postman responses and code ss
-databaseconnection();
-//code for creating server
-let port = 5000;
-app.listen(port, () => console.log(`Server is running at ${port}`));
+// getting all quotes
+app.get("/api/quotes", async (req, res) => {
+  try {
+    const quotesdata = await CONTENT_MODEL.find({ type: "quotes" }).sort({
+      _id: -1,
+    });
+    return res.json({ data: quotesdata, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// getting all jokes
+app.get("/api/jokes", async (req, res) => {
+  try {
+    const jokesdata = await CONTENT_MODEL.find({ type: "jokes" }).sort({
+      _id: -1,
+    });
+    return res.json({ data: jokesdata, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+databaseconnection().then(() => {
+  app.listen(5000, () => console.log("Server is running at port 5000"));
+});
